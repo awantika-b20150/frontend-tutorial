@@ -2,9 +2,6 @@ import React from 'react';
 import { Select } from 'antd';
 import Prefectures from "@/utils/Pref";
 
-const onClick = (value: string) => {
-  console.log(`Click on ${value}`);
-};
 const onChange = (value: string) => {
   console.log(`selected ${value}`);
 };
