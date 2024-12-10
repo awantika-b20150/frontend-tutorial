@@ -6,9 +6,12 @@ import { Select } from 'antd';
 import { MdOutlineLocationOn, MdWbSunny } from "react-icons/md";
 import { MdMyLocation } from "react-icons/md";
 import { WiHumidity,WiStrongWind } from "react-icons/wi";
+import  ForecastWeatherDetail  from "@/components/ForecastWeatherDetails";
+import { format, parseISO } from "date-fns";
 
 interface WeatherDetail {
   dt: number;
+  dt_txt:string;
   main: {
     temp: number;
     feels_like: number;
@@ -194,6 +197,25 @@ return (
             <div>Wind Speed: {weatherData?.wind.speed}m/s</div>
             </div>
       </div>
+      {/* 7 day forcast data  */}
+      <section className="flex w-full flex-col gap-4  ">
+              <p className="text-2xl">Forecast (5 days)</p>
+              {firstDataForEachDate.map((d, i) => (
+                <ForecastWeatherDetail
+                  key={i}
+                  description={d?.weather[0].description ?? ""}
+                  weatherIcon={d?.weather[0].icon ?? "01d"}
+                  date={d ? format(parseISO(d.dt_txt), "dd.MM") : ""}
+                  day={d ? format(parseISO(d.dt_txt), "dd.MM") : "EEEE"}
+                  feels_like={d?.main.feels_like ?? 0}
+                  temp={d?.main.temp ?? 0}
+                  temp_max={d?.main.temp_max ?? 0}
+                  temp_min={d?.main.temp_min ?? 0}
+                  humidity={`${d?.main.humidity}% `}
+                  windSpeed={`${d?.wind.speed ?? 1.64} `}
+                />
+              ))}
+            </section>
   </div>
   );
 }
