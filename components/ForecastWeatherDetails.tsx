@@ -1,15 +1,34 @@
 import React from "react";
 import WeatherIcon from "./WeatherIcon";
-import WeatherDetails, { WeatherDetailProps } from "./WeatherDetails";
-import { convertKelvinToCelsius } from "@/utils/convertTemperature";
+import { WiHumidity,WiStrongWind } from "react-icons/wi";
 
-export interface ForecastWeatherDetailProps extends WeatherDetailProps {
+
+export interface SingleWeatherDetailProps {
+  information: string;
+  icon: React.ReactNode;
+  value: string;
+}
+
+function SingleWeatherDetail(props: SingleWeatherDetailProps) {
+  return (
+    <div className="flex flex-col gap-2 items-center text-xs font-semibold text-black/80">
+      <p className="whitespace-nowrap">{props.information}</p>
+      <div className="text-3xl">{props.icon}</div>
+      <p>{props.value}</p>
+    </div>
+  );
+}
+
+
+
+export interface ForecastWeatherDetailProps {
   weatherIcon: string;
   date: string;
-  day: string;
   temp: number;
   feels_like: number;
   description: string;
+  humidity: string;
+  windSpeed: string;
 }
 
 export default function ForecastWeatherDetail(
@@ -18,35 +37,41 @@ export default function ForecastWeatherDetail(
   const {
     weatherIcon = "02d",
     date = "19.09",
-    day = "Tuesday",
     temp,
     feels_like,
-    description
+    description,
+    humidity,
+    windSpeed
   } = props;
   return (
-    <div className="gap-4">
+    <div className="gap-4 flex flex-row h-full justify-center items-center">
       {/* left */}
-      <section className=" flex gap-4 items-center px-4  ">
-        <div className=" flex flex-col gap-1 items-center">
+        <div className=" flex flex-col gap-auto justify-center items-center">
           <WeatherIcon iconName={weatherIcon} />
           <p>{date}</p>
-          <p className="text-sm">{day} </p>
         </div>
 
         {/*  */}
-        <div className="flex flex-col px-4">
-          <span className="text-5xl">{convertKelvinToCelsius(temp ?? 0)}°</span>
+        <div className="flex flex-col px-4 items-center">
+          <span className="text-5xl">{temp ?? 0}°</span>
           <p className="text-xs space-x-1 whitespace-nowrap">
             <span> Feels like</span>
-            <span>{convertKelvinToCelsius(feels_like ?? 0)}°</span>
+            <span>{feels_like ?? 0}°</span>
           </p>
           <p className="capitalize"> {description}</p>
         </div>
-      </section>
-      {/* right */}
-      <section className=" overflow-x-auto flex justify-between gap-4 px-4  w-full pr-10">
-        <WeatherDetails {...props} />
-      </section>
+      <div className="flex flex-row justify-center gap-4 px-4  w-full pr-10 items-center">
+        <SingleWeatherDetail
+          icon={<WiHumidity color="skyblue"/>}
+          information="Humidity"
+          value={humidity}
+        />
+        <SingleWeatherDetail
+          icon={<WiStrongWind color="grey"/>}
+          information="Wind speed"
+          value={windSpeed}
+        />
+      </div>
     </div>
   );
 }

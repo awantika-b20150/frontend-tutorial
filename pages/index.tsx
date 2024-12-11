@@ -8,6 +8,7 @@ import { MdMyLocation } from "react-icons/md";
 import { WiHumidity,WiStrongWind } from "react-icons/wi";
 import  ForecastWeatherDetail  from "@/components/ForecastWeatherDetails";
 import { format, parseISO } from "date-fns";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 interface WeatherDetail {
   dt: number;
@@ -54,7 +55,10 @@ interface WeatherData {
     sunset: number;
   };
 }
-
+interface Chart {
+  dates:string,
+  temp:number
+}
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -78,6 +82,7 @@ export default function Home() {
   const [longitude,setLongitude] = useState(0);
   const [place,setPlace] = useState("Japan");
   const [forecast,setForecast] = useState<WeatherData>();
+  const [chartData,setChartData] = useState<Chart[]>();
 
   let currentDate = new Date();
   let year = currentDate.getFullYear();
@@ -108,7 +113,6 @@ export default function Home() {
       .get(`${BASE_URL}forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`)
       .then((response) => {
           const data = response.data;
-          console.log(data);
           setForecast(data);
       });
     
@@ -117,7 +121,7 @@ export default function Home() {
 function convertUnixTimeToDate(unixUtc: number): Date {
   return new Date(unixUtc * 1000);
 }
-const firstData = forecast?.list[0];
+
 const uniqueDates = [
   ...new Set(
     forecast?.list.map(
@@ -128,11 +132,22 @@ const uniqueDates = [
 // Filtering data to get the first entry after 6 AM for each unique date
 const firstDataForEachDate = uniqueDates.map((date) => {
   return forecast?.list.find((entry) => {
-    const entryDate = new Date(entry.dt * 1000).toISOString().split("T")[0];
-    const entryTime = new Date(entry.dt * 1000).getHours();
+    const entryDate = new Date((entry.dt) * 1000).toISOString().split("T")[0];
+    const entryTime = new Date((entry.dt) * 1000).getHours();
     return entryDate === date && entryTime >= 6;
   });
 });
+
+
+const chart_temp = new Array<Chart>;
+firstDataForEachDate.map((d) => 
+  chart_temp.push({
+    temp:(Math.floor(d?.main.temp ?? 0)),
+    dates: (d ? format(parseISO(d.dt_txt), "dd.MM") : "")
+  }
+));
+
+
 
 return (
   <div className="flex flex-col gap-4 bg-gray-100 min-h-screen ">
@@ -174,31 +189,45 @@ return (
           />
         </div>
       </section>
-      <h2 className="text-4xl font-extrabold dark:text-white px-20">{todayDate}{" "} {" "}{weatherData?.dt ? convertUnixTimeToDate(weatherData.dt).toLocaleTimeString():null}</h2>
-      <div className="w-1/2 bg-white border rounded-xl flex flex-row px-20 space-x-8 shadow-sm items-center">
-            <div>
-            {weatherData?.weather.map(condition =>
-              <div key={condition.id}>
-                <img src={getIconUrl(condition.icon)} alt={condition.main}/> {condition.main}
-              </div>)
-            }
-            </div>
-            <div className="flex flex-col items-center justify-centre">
-              <strong>{weatherData?.main.temp}°</strong>
-              <div>Feels like {weatherData?.main.feels_like}°</div>
-              <div>({weatherData?.main.temp_min}°↓{" "} {" "} {weatherData?.main.temp_max}°↑)</div>
-            </div>
-            <div className="flex flex-col items-center justify-centre">
-            <WiHumidity size={42} color="skyblue" />
-            <div>Humidity: {weatherData?.main.humidity}%</div>
-            </div>
-            <div className="flex flex-col items-center justify-centre">
-            <WiStrongWind size={42} color="grey"/>
-            <div>Wind Speed: {weatherData?.wind.speed}m/s</div>
-            </div>
+      <h2 className="text-4xl font-extrabold dark:text-white px-20 text-center">{todayDate}{" "} {" "}{weatherData?.dt ? convertUnixTimeToDate(weatherData.dt).toLocaleTimeString():null}</h2>
+      <div className="w-full bg-white border rounded-xl flex flex-row px-20 space-x-8 shadow-sm items-center">
+      <div className="w-1/2 bg-white border rounded-xl flex flex-col px-20 space-x-8 shadow-sm items-center">
+        <div className="w-full bg-white flex flex-row space-x-8 items-center">
+              <div>
+              {weatherData?.weather.map(condition =>
+                <div key={condition.id}>
+                  <img src={getIconUrl(condition.icon)} alt={condition.main}/> {condition.main}
+                </div>)
+              }
+              </div>
+              <div className="flex flex-col items-center justify-centre">
+                <strong>{Math.floor(weatherData?.main.temp ?? 0)}°</strong>
+                <div>Feels like {Math.floor(weatherData?.main.feels_like ?? 0)}°</div>
+                <div>({Math.floor(weatherData?.main.temp_min ?? 0)}°↓{" "} {" "} {Math.floor(weatherData?.main.temp_max ?? 0)}°↑)</div>
+              </div>
+              <div className="flex flex-col gap-2 items-center text-s font-semibold text-black/80">
+                <p className="whitespace-nowrap">Humidity</p>
+                <div className="text-3xl"><WiHumidity size={42} color="skyblue" /></div>
+                <p>{weatherData?.main.humidity}%</p>
+              </div>
+              <div className="flex flex-col gap-2 items-center text-s font-semibold text-black/80">
+                <p className="whitespace-nowrap">Wind Speed</p>
+                <div className="text-3xl"><WiStrongWind size={42} color="grey" /></div>
+                <p>{weatherData?.wind.speed}{" "}m/s</p>
+              </div>
+        </div>
+        <div>
+        <LineChart width={600} height={300} data={chart_temp} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+            <Line type="monotone" dataKey="temp" stroke="#8884d8" />
+            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+            <XAxis dataKey="dates" />
+            <YAxis />
+            <Tooltip />
+          </LineChart>
+        </div>
       </div>
-      {/* 7 day forcast data  */}
-      <section className="flex w-full flex-col gap-4  ">
+      {/* 5 day forecast data  */}
+      <div className="w-1/2 bg-white border rounded-xl flex flex-col px-20 space-x-8 shadow-sm items-center">
               <p className="text-2xl">Forecast (5 days)</p>
               {firstDataForEachDate.map((d, i) => (
                 <ForecastWeatherDetail
@@ -206,16 +235,14 @@ return (
                   description={d?.weather[0].description ?? ""}
                   weatherIcon={d?.weather[0].icon ?? "01d"}
                   date={d ? format(parseISO(d.dt_txt), "dd.MM") : ""}
-                  day={d ? format(parseISO(d.dt_txt), "dd.MM") : "EEEE"}
-                  feels_like={d?.main.feels_like ?? 0}
-                  temp={d?.main.temp ?? 0}
-                  temp_max={d?.main.temp_max ?? 0}
-                  temp_min={d?.main.temp_min ?? 0}
+                  feels_like={Math.floor(d?.main.feels_like ?? 0)}
+                  temp={Math.floor(d?.main.temp ?? 0)}
                   humidity={`${d?.main.humidity}% `}
-                  windSpeed={`${d?.wind.speed ?? 1.64} `}
+                  windSpeed={`${d?.wind.speed ?? 1.64} m/s `}
                 />
               ))}
-            </section>
+      </div>
+      </div>
   </div>
   );
 }

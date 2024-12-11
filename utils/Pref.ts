@@ -1,190 +1,190 @@
 const Prefectures = [
     {
-        key: '1',
+        label: 'Hokkaido',
         value: 'Hokkaido',
     },
     {
-        key: '2',
+        label: 'Aomori',
         value: 'Aomori',
     },
     {
-        key: '3',
+        label: 'Iwate',
         value: 'Iwate',
     },
     {
-        key: '4',
+        label: 'Miyagi',
         value: 'Miyagi',
     },
     {
-        key: '5',
+        label: 'Akita',
         value: 'Akita',
     },
     {
-        key: '6',
+        label: 'Yamagata',
         value: 'Yamagata',
     },
     {
-        key: '7',
+        label: 'Fukushima',
         value: 'Fukushima',
     },
     {
-        key: '8',
+        label: 'Ibaraki',
         value: 'Ibaraki',
     },
     {
-        key: '9',
+        label: 'Tochigi',
         value: 'Tochigi',
     },
     {
-        key: '10',
+        label: 'Gunma',
         value: 'Gunma',
     },
     {
-        key: '11',
+        label: 'Saitama',
         value: 'Saitama',
     },
     {
-        key: '12',
+        label: 'Chiba',
         value: 'Chiba',
     },
     {
-        key: '13',
+        label: 'Tokyo',
         value: 'Tokyo',
     },
     {
-        key: '14',
+        label: 'Kanagawa',
         value: 'Kanagawa',
     },
     {
-        key: '15',
+        label: 'Nigata',
         value: 'Nigata',
     },
     {
-        key: '16',
+        label: 'Toyama',
         value: 'Toyama',
     },
     {
-        key: '17',
+        label: 'Ishikawa',
         value: 'Ishikawa',
     },
     {
-        key: '18',
+        label: 'Fukui',
         value: 'Fukui',
     },
     {
-        key: '19',
+        label: 'Yamanashi',
         value: 'Yamanashi',
     },
     {
-        key: '20',
+        label: 'Nagano',
         value: 'Nagano',
     },
     {
-        key: '21',
+        label: 'Gifu',
         value: 'Gifu',
     },
     {
-        key: '22',
+        label: 'Shizuoka',
         value: 'Shizuoka',
     },
     {
-        key: '23',
+        label: 'Aichi',
         value: 'Aichi',
     },
     {
-        key: '24',
+        label: 'Mie',
         value: 'Mie',
     },
     {
-        key: '25',
+        label: 'Shiga',
         value: 'Shiga',
     },
     {
-        key: '26',
+        label: 'Osaka',
         value: 'Osaka',
     },
     {
-        key: '27',
+        label: 'Kyoto',
         value: 'Kyoto',
     },
     {
-        key: '28',
+        label: 'Hyogo',
         value: 'Hyogo',
     },
     {
-        key: '29',
+        label: 'Nara',
         value: 'Nara',
     },
     {
-        key: '30',
+        label: 'Wakayama',
         value: 'Wakayama',
     },
     {
-        key: '31',
+        label: 'Tottori',
         value: 'Tottori',
     },
     {
-        key: '32',
+        label: 'Shimane',
         value: 'Shimane',
     },
     {
-        key: '33',
+        label: 'Okayama',
         value: 'Okayama',
     },
     {
-        key: '34',
+        label: 'Hiroshima',
         value: 'Hiroshima',
     },
     {
-        key: '35',
+        label: 'Yamaguchi',
         value: 'Yamaguchi',
     },
     {
-        key: '36',
+        label: 'Tokushima',
         value: 'Tokushima',
     },
     {
-        key: '37',
+        label: 'Kagawa',
         value: 'Kagawa',
     },
     {
-        key: '38',
+        label: 'Ehime',
         value: 'Ehime',
     },
     {
-        key: '39',
+        label: 'Kochi',
         value: 'Kochi',
     },
     {
-        key: '40',
+        label: 'Fukuoka',
         value: 'Fukuoka',
     },
     {
-        key: '41',
+        label: 'Saga',
         value: 'Saga',
     },
     {
-        key: '42',
+        label: 'Nagasaki',
         value: 'Nagasaki',
     },
     {
-        key: '43',
+        label: 'Kumamoto',
         value: 'Kumamoto',
     },
     {
-        key: '44',
+        label: 'Oita',
         value: 'Oita',
     },
     {
-        key: '45',
+        label: 'Miyazaki',
         value: 'Miyazaki',
     },
     {
-        key: '46',
+        label: 'Kagoshima',
         value: 'Kagoshima',
     },
     {
-        key: '47',
+        label: 'Okinawa',
         value: 'Okinawa',
     },
 ];
