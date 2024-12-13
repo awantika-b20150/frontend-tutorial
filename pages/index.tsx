@@ -1,3 +1,4 @@
+'use client';
 import localFont from "next/font/local";
 import { useEffect, useState } from 'react'
 import axios from "axios";
@@ -8,7 +9,8 @@ import { MdMyLocation } from "react-icons/md";
 import { WiHumidity,WiStrongWind } from "react-icons/wi";
 import  ForecastWeatherDetail  from "@/components/ForecastWeatherDetails";
 import { format, parseISO } from "date-fns";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,Legend } from 'recharts';
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
 interface WeatherDetail {
   dt: number;
@@ -82,7 +84,6 @@ export default function Home() {
   const [longitude,setLongitude] = useState(0);
   const [place,setPlace] = useState("Japan");
   const [forecast,setForecast] = useState<WeatherData>();
-  const [chartData,setChartData] = useState<Chart[]>();
 
   let currentDate = new Date();
   let year = currentDate.getFullYear();
@@ -90,7 +91,10 @@ export default function Home() {
   let day = currentDate.getDate();
   let todayDate= `${year}/${month}/${day}`;
   
-
+  
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
   const handleOnChange = async (value:string) => {
     setPlace(value);
   };
@@ -115,6 +119,13 @@ export default function Home() {
           const data = response.data;
           setForecast(data);
       });
+      const params = new URLSearchParams(searchParams);
+      if (place) {
+        params.set('query', place);
+      } else {
+        params.delete('query');
+      }
+      replace(`${pathname}?${params.toString()}`);
     
 }, [place,latitude,longitude]); 
 
@@ -150,9 +161,9 @@ firstDataForEachDate.map((d) =>
 
 
 return (
-  <div className="flex flex-col gap-4 bg-gray-100 min-h-screen ">
-    <nav className="shadow-sm  sticky top-0 left-0 z-50 bg-white">
-        <div className="h-[80px]     w-full    flex   justify-between items-center  max-w-7xl px-3 mx-auto">
+  <div className="flex flex-col gap-4 bg-gray-100 min-h-screen md:flex">
+    <nav className="flex shadow-sm  sticky top-0 left-0 z-50 bg-white md:flex">
+        <div className="h-[80px] w-full flex justify-between items-center max-w-7xl px-3 mx-auto">
           <div className="text-4xl font-extrabold dark:text-white">Weather</div>
           <MdWbSunny className="text-3xl mt-1 text-yellow-300" />
           <section className="flex gap-2 items-center">
@@ -162,7 +173,7 @@ return (
             />
             <MdOutlineLocationOn className="text-3xl" />
             <p className="text-slate-900/80 text-sm"> {place} </p>
-            <div className="relative hidden md:flex">
+            <div className="relative md:flex">
               {/* SearchBox */}
 
               <Select
@@ -171,28 +182,17 @@ return (
               optionFilterProp="label"
               onChange={handleOnChange}
               options={Prefectures}
+              value={searchParams.get('query')?.toString()}
               />
             </div>
           </section>
         </div>
       </nav>
-      <section className="flex max-w-7xl px-3 md:hidden ">
-        <div className="relative ">
-          {/* SearchBox */}
-
-          <Select
-          showSearch
-          placeholder="Select prefecture"
-          optionFilterProp="label"
-          onChange={handleOnChange}
-          options={Prefectures}
-          />
-        </div>
-      </section>
       <h2 className="text-4xl font-extrabold dark:text-white px-20 text-center">{todayDate}{" "} {" "}{weatherData?.dt ? convertUnixTimeToDate(weatherData.dt).toLocaleTimeString():null}</h2>
-      <div className="w-full bg-white border rounded-xl flex flex-row px-20 space-x-8 shadow-sm items-center">
-      <div className="w-1/2 bg-white border rounded-xl flex flex-col px-20 space-x-8 shadow-sm items-center">
-        <div className="w-full bg-white flex flex-row space-x-8 items-center">
+      <div className="w-full flex flex-row px-20 space-x-8 shadow-sm items-center md:flex">
+      <div className="w-1/2">
+      <p className="text-2xl text-center font-semibold">Current Weather</p>
+        <div className="w-full bg-white border flex flex-row rounded-xl px-20 space-x-12 shadow-sm justify-center items-center mt-4 md:flex">
               <div>
               {weatherData?.weather.map(condition =>
                 <div key={condition.id}>
@@ -216,19 +216,21 @@ return (
                 <p>{weatherData?.wind.speed}{" "}m/s</p>
               </div>
         </div>
-        <div>
+        <p className="text-2xl text-center font-semibold mt-16">Temperature Chart (5 days)</p>
+        <div className="w-full bg-white border flex flex-row rounded-xl px-20 space-x-8 shadow-sm items-center mt-4 md:flex">
         <LineChart width={600} height={300} data={chart_temp} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
             <Line type="monotone" dataKey="temp" stroke="#8884d8" />
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
             <XAxis dataKey="dates" />
             <YAxis />
             <Tooltip />
+            <Legend />
           </LineChart>
         </div>
       </div>
       {/* 5 day forecast data  */}
-      <div className="w-1/2 bg-white border rounded-xl flex flex-col px-20 space-x-8 shadow-sm items-center">
-              <p className="text-2xl">Forecast (5 days)</p>
+      <div className="w-1/2 bg-white border rounded-xl flex flex-col px-20 space-x-8 shadow-sm items-center md:flex">
+              <p className="text-2xl font-semibold">Forecast (5 days)</p>
               {firstDataForEachDate.map((d, i) => (
                 <ForecastWeatherDetail
                   key={i}

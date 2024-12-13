@@ -4,7 +4,13 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   images: {
-    domains: ['openweathermap.org'],
+    remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'openweathermap.org',
+      pathname: '**',
+    }
+  ],
   },
 };
 
