@@ -44,7 +44,7 @@ export default function ForecastWeatherDetail(
     windSpeed
   } = props;
   return (
-    <div className="gap-4 flex flex-row h-full justify-center items-center">
+    <div className="gap-8 flex flex-row h-full justify-center items-center">
       {/* left */}
         <div className=" flex flex-col gap-auto justify-center items-center">
           <WeatherIcon iconName={weatherIcon} />
@@ -60,7 +60,7 @@ export default function ForecastWeatherDetail(
           </p>
           <p className="capitalize"> {description}</p>
         </div>
-      <div className="flex flex-row justify-center gap-4 px-4  w-full pr-10 items-center">
+      <div className="flex flex-row justify-center gap-4 px-4  w-full pr-4 items-center">
         <SingleWeatherDetail
           icon={<WiHumidity color="skyblue"/>}
           information="Humidity"
