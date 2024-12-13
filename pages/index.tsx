@@ -1,5 +1,4 @@
 'use client';
-import localFont from "next/font/local";
 import { useEffect, useState } from 'react'
 import axios from "axios";
 import Prefectures from "@/utils/Pref";
@@ -80,11 +79,11 @@ export default function Home() {
   const [place,setPlace] = useState("Japan");
   const [forecast,setForecast] = useState<WeatherData>();
 
-  let currentDate = new Date();
-  let year = currentDate.getFullYear();
-  let month = currentDate.getMonth() + 1;
-  let day = currentDate.getDate();
-  let todayDate= `${year}/${month}/${day}`;
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1;
+  const day = currentDate.getDate();
+  const todayDate= `${year}/${month}/${day}`;
   
   
   const searchParams = useSearchParams();
