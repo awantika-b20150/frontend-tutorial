@@ -95,7 +95,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-        .get(`http://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=${API_KEY}`)
+        .get(`https://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=${API_KEY}`)
         .then((response) => {
             const data = response.data;
             setLatitude(data[0].lat);
