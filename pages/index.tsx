@@ -10,6 +10,7 @@ import  ForecastWeatherDetail  from "@/components/ForecastWeatherDetails";
 import { format, parseISO } from "date-fns";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,Legend } from 'recharts';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 // Format in which current weather api returns data for given location
 interface WeatherDetail {
@@ -188,7 +189,7 @@ return (
               <div className='items-center justify-between'>
               {weatherData?.weather.map(condition =>
                 <div key={condition.id}>
-                  <img src={getIconUrl(condition.icon)} alt={condition.main}/> {condition.main}
+                  <Image src={getIconUrl(condition.icon)} alt={condition.main}/> {condition.main}
                 </div>)
               }
               </div>
