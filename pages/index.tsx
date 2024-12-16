@@ -65,7 +65,7 @@ interface Chart {
   temp:number
 }
 
-
+//getting icon based on current weather
 export function getIconUrl(code: string): string {
   return `http://openweathermap.org/img/wn/${code}.png`;
 }
@@ -85,7 +85,7 @@ export default function Home() {
   const day = currentDate.getDate();
   const todayDate= `${year}/${month}/${day}`;
   
-  
+  //page routing
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -95,25 +95,25 @@ export default function Home() {
 
   useEffect(() => {
     axios
-        .get(`https://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=${API_KEY}`)
+        .get(`https://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=${API_KEY}`) //getting coordinates based on place selected by user
         .then((response) => {
             const data = response.data;
             setLatitude(data[0].lat);
             setLongitude(data[0].lon)
         });
     axios
-        .get(`${BASE_URL}weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`)
+        .get(`${BASE_URL}weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`) //getting current data
         .then((response) => {
             const data = response.data;
             setWeatherData(data);
         });
     axios
-      .get(`${BASE_URL}forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`)
+      .get(`${BASE_URL}forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`) //getting next 5days data
       .then((response) => {
           const data = response.data;
           setForecast(data);
       });
-      const params = new URLSearchParams(searchParams);
+      const params = new URLSearchParams(searchParams); //updating url
       if (place) {
         params.set('query', place);
       } else {
@@ -143,7 +143,7 @@ const firstDataForEachDate = uniqueDates.map((date) => {
   });
 });
 
-
+//getting temperature array of next 5 days 
 const chart_temp = new Array<Chart>;
 firstDataForEachDate.map((d) => 
   chart_temp.push({
@@ -151,8 +151,6 @@ firstDataForEachDate.map((d) =>
     dates: (d ? format(parseISO(d.dt_txt), "dd.MM") : "")
   }
 ));
-
-
 
 return (
   <div className="w-screen flex flex-col gap-4 justify-between bg-gray-100 overflow-scroll">
@@ -170,7 +168,6 @@ return (
             <p className="text-slate-900/80 text-sm"> {place} </p>
             <div className="relative md:flex">
               {/* SearchBox */}
-
               <Select
               showSearch
               placeholder="Select prefecture"
@@ -188,7 +185,7 @@ return (
       <h2 className="text-2xl text-center font-semibold">{todayDate}{" "} {" "}{weatherData?.dt ? convertUnixTimeToDate(weatherData.dt).toLocaleTimeString():null}</h2>
       <p className="text-2xl text-center font-semibold">Current Weather</p>
         <div className="w-full bg-white border flex flex-row rounded-xl px-20 space-x-12 shadow-sm justify-between items-center mt-4">
-              <div>
+              <div className='items-center justify-between'>
               {weatherData?.weather.map(condition =>
                 <div key={condition.id}>
                   <img src={getIconUrl(condition.icon)} alt={condition.main}/> {condition.main}

@@ -11,14 +11,13 @@ export interface SingleWeatherDetailProps {
 
 function SingleWeatherDetail(props: SingleWeatherDetailProps) {
   return (
-    <div className="flex flex-col gap-2 items-center text-xs font-semibold text-black/80">
+    <div className="flex flex-col gap-2 justify-center items-center text-xs font-semibold text-black/80">
       <p className="whitespace-nowrap">{props.information}</p>
       <div className="text-3xl">{props.icon}</div>
       <p>{props.value}</p>
     </div>
   );
 }
-
 
 
 export interface ForecastWeatherDetailProps {
@@ -50,9 +49,7 @@ export default function ForecastWeatherDetail(
           <WeatherIcon iconName={weatherIcon} />
           <p>{date}</p>
         </div>
-
-        {/*  */}
-        <div className="flex flex-col px-4 items-center">
+        <div className="flex flex-col px-4 justify-center items-center">
           <span className="text-5xl">{temp ?? 0}°</span>
           <p className="text-xs space-x-1 whitespace-nowrap">
             <span> Feels like</span>
