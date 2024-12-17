@@ -10,12 +10,11 @@ import { convertUnixTimeToDate } from "@/utils/convertUnixTime";
 import ForecastChart from "@/components/Chart";
 import DropDown from "@/components/Dropdown";
 import { extractChart } from "@/utils/extractChart";
-import { useForecast } from "@/features/hooks/useForecast";
+import { extractForecast } from "@/utils/extractForecast";
 
 
 export default function Home() {
-  const {place,weatherData,handleOnChange,searchParams,todayDate} = useWeatherData();
-  const {firstDataForEachDate} = useForecast();
+  const {place,weatherData,handleOnChange,searchParams,todayDate,forecast} = useWeatherData();
 
 return (
   <div className="w-screen flex flex-col gap-4 justify-between bg-gray-100 overflow-scroll">
@@ -70,7 +69,7 @@ return (
         </div>
         <p className="text-2xl text-center font-semibold mt-16">Temperature Chart (5 days)</p>
         <div className="w-full bg-white border flex flex-row rounded-xl px-20 space-x-8 shadow-sm items-center justify-between mt-4">
-        <ForecastChart data={extractChart()}/>
+        <ForecastChart data={extractChart(forecast)}/>
         </div>
       </div>
       {/* 5 day forecast data  */}
@@ -78,7 +77,7 @@ return (
       <p className="text-2xl font-semibold">Forecast (5 days)</p>
       <div className=" bg-white border rounded-xl flex flex-col px-5 space-x-8 shadow-sm justify-between items-center mt-8 ">
               
-              {firstDataForEachDate.map((d, i) => (
+              {extractForecast(forecast).map((d, i) => (
                 <ForecastWeatherDetail
                   key={i}
                   description={d?.weather[0].description ?? ""}

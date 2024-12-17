@@ -1,9 +1,7 @@
-import { useWeatherData } from "@/features/hooks/useWeatherData";
+import { WeatherData } from '@/types/ForecastWeatherType';
 
 
-const {forecast} = useWeatherData();
-
-export const useForecast = () => {
+export function extractForecast (forecast:WeatherData | undefined){
   const uniqueDates = [
     ...new Set(
       forecast?.list.map(
@@ -22,7 +20,7 @@ export const useForecast = () => {
   
   
 
-  return {firstDataForEachDate};
+  return firstDataForEachDate;
 
 }
 

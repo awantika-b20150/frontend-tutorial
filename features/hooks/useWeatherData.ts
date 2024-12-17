@@ -1,4 +1,3 @@
-'use client';
 import { useEffect, useState } from 'react';
 import { WeatherDetail } from '@/types/CurrentWeatherType';
 import { WeatherData } from '@/types/ForecastWeatherType';
@@ -9,8 +8,8 @@ export const useWeatherData = () => {
     const [place,setPlace] = useState<string>("Japan");
     const [latitude,setLatitude] = useState<number>(0);
     const [longitude,setLongitude] = useState<number>(0);
-    const [weatherData,setWeatherData] = useState<WeatherDetail>();
-    const [forecast,setForecast] = useState<WeatherData>();
+    const [weatherData,setWeatherData] = useState<WeatherDetail | undefined>();
+    const [forecast,setForecast] = useState<WeatherData | undefined>();
     
     const currentDate = new Date();
     const year = currentDate.getFullYear();

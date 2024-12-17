@@ -1,9 +1,10 @@
 import { Chart } from '@/types/ChartType';
 import { format, parseISO } from "date-fns";
-import { useForecast } from '@/features/hooks/useForecast';
+import { extractForecast } from './extractForecast';
+import { WeatherData } from '@/types/ForecastWeatherType';
 
-export function extractChart(){
-    const {firstDataForEachDate} = useForecast();
+export function extractChart(data:WeatherData | undefined){
+    const firstDataForEachDate = extractForecast(data);
     const chart_temp = new Array<Chart>;
     firstDataForEachDate.map((d) => 
     chart_temp.push({
