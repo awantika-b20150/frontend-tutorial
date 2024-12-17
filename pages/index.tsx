@@ -211,7 +211,7 @@ return (
               <div className="flex flex-col gap-2 items-center justify-between text-s font-semibold text-black/80">
                 <p className="whitespace-nowrap">Wind Speed</p>
                 <div className="text-3xl"><WiStrongWind size={42} color="grey" /></div>
-                <p>{weatherData?.wind.speed}{" "}m/s</p>
+                <p>{weatherData?.wind.speed} m/s</p>
               </div>
         </div>
         <p className="text-2xl text-center font-semibold mt-16">Temperature Chart (5 days)</p>
