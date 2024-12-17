@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import { WeatherDetail } from '@/types/CurrentWeatherType';
 import { WeatherData } from '@/types/ForecastWeatherType';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { format, parseISO } from "date-fns";
-import { Chart } from '@/types/ChartType';
 import axios from "axios";
 
 export const useWeatherData = () => {
@@ -92,31 +90,7 @@ export const useWeatherData = () => {
     
     }, [weatherData]);
 
-     const uniqueDates = [
-        ...new Set(
-          forecast?.list.map(
-            (entry) => new Date(entry.dt * 1000).toISOString().split("T")[0]
-          )
-        )
-      ];
-      // Filtering data to get the first entry after 6 AM for each unique date
-    const firstDataForEachDate = uniqueDates.map((date) => {
-        return forecast?.list.find((entry) => {
-          const entryDate = new Date((entry.dt) * 1000).toISOString().split("T")[0];
-          const entryTime = new Date((entry.dt) * 1000).getHours();
-          return entryDate === date && entryTime >= 6;
-        });
-      });
-
-      const chart_temp = new Array<Chart>;
-      firstDataForEachDate.map((d) => 
-      chart_temp.push({
-        temp:(Math.floor(d?.main.temp ?? 0)),
-        dates: (d ? format(parseISO(d.dt_txt), "dd.MM") : "")
-      }
-    ));
 
 
-
-    return {place,setPlace,latitude,setLatitude,longitude,setLongitude,weatherData,setWeatherData,forecast,setForecast,handleOnChange,searchParams,todayDate,chart_temp,firstDataForEachDate};
+    return {place,setPlace,latitude,setLatitude,longitude,setLongitude,weatherData,setWeatherData,forecast,setForecast,handleOnChange,searchParams,todayDate};
 }

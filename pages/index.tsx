@@ -9,10 +9,13 @@ import { useWeatherData } from '@/hooks/useWeatherData';
 import { convertUnixTimeToDate } from "@/utils/convertUnixTime";
 import ForecastChart from "@/components/Chart";
 import DropDown from "@/components/Dropdown";
+import { extractChart } from "@/utils/extractChart";
+import { useForecast } from "@/hooks/useForecast";
 
 
 export default function Home() {
-  const {place,weatherData,handleOnChange,searchParams,todayDate,chart_temp,firstDataForEachDate} = useWeatherData();
+  const {place,weatherData,handleOnChange,searchParams,todayDate} = useWeatherData();
+  const {firstDataForEachDate} = useForecast();
 
 return (
   <div className="w-screen flex flex-col gap-4 justify-between bg-gray-100 overflow-scroll">
@@ -67,7 +70,7 @@ return (
         </div>
         <p className="text-2xl text-center font-semibold mt-16">Temperature Chart (5 days)</p>
         <div className="w-full bg-white border flex flex-row rounded-xl px-20 space-x-8 shadow-sm items-center justify-between mt-4">
-        <ForecastChart data={chart_temp}/>
+        <ForecastChart data={extractChart()}/>
         </div>
       </div>
       {/* 5 day forecast data  */}
