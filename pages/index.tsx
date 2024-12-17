@@ -68,7 +68,7 @@ interface Chart {
 
 //getting icon based on current weather
 export function getIconUrl(code: string): string {
-  return `http://openweathermap.org/img/wn/${code}.png`;
+  return `https://openweathermap.org/img/wn/${code}.png`;
 }
 
 export default function Home() {
@@ -93,23 +93,25 @@ export default function Home() {
   const handleOnChange = async (value:string) => {
     setPlace(value);
   };
-
+  const DIRECT_URL=`${BASE_URL}/geo/1.0/direct`;
+  const WEATHER_URL=`${BASE_URL}/data/2.5/weather`;
+  const FORECAST_URL=`${BASE_URL}/data/2.5/forecast`;
   useEffect(() => {
     axios
-        .get(`https://api.openweathermap.org/geo/1.0/direct?q=${place}&limit=5&appid=${API_KEY}`) //getting coordinates based on place selected by user
+        .get(`${DIRECT_URL}?q=${place}&limit=5&appid=${API_KEY}`) //getting coordinates based on place selected by user
         .then((response) => {
             const data = response.data;
             setLatitude(data[0].lat);
             setLongitude(data[0].lon)
         });
     axios
-        .get(`${BASE_URL}weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`) //getting current data
+        .get(`${WEATHER_URL}?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`) //getting current data
         .then((response) => {
             const data = response.data;
             setWeatherData(data);
         });
     axios
-      .get(`${BASE_URL}forecast?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`) //getting next 5days data
+      .get(`${FORECAST_URL}?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`) //getting next 5days data
       .then((response) => {
           const data = response.data;
           setForecast(data);
@@ -189,7 +191,7 @@ return (
               <div className='items-center justify-between'>
               {weatherData?.weather.map(condition =>
                 <div key={condition.id}>
-                  <Image src={getIconUrl(condition.icon)} alt={condition.main}/> {condition.main}
+                  <Image src={getIconUrl(condition.icon)} alt={condition.main} width={5} height={5}/> {condition.main}
                 </div>)
               }
               </div>
