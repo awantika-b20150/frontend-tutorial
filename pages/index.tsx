@@ -10,16 +10,11 @@ import  ForecastWeatherDetail  from "@/components/ForecastWeatherDetails";
 import { format, parseISO } from "date-fns";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,Legend } from 'recharts';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import { WeatherDetail } from '@/types/CurrentWeatherType';
 import { WeatherData } from '@/types/ForecastWeatherType';
 import { Chart } from '@/types/ChartType';
+import WeatherIcon from '@/components/WeatherIcon';
 
-
-//getting icon based on current weather
-export function getIconUrl(code: string): string {
-  return `https://openweathermap.org/img/wn/${code}.png`;
-}
 
 export default function Home() {
   const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
@@ -52,9 +47,13 @@ export default function Home() {
         .then((response) => {
             const data = response.data;
             setLatitude(data[0].lat);
-            setLongitude(data[0].lon)
+            setLongitude(data[0].lon);
         });
-    axios
+    
+}, [place]); 
+
+useEffect(() => {
+  axios
         .get(`${WEATHER_URL}?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`) //getting current data
         .then((response) => {
             const data = response.data;
@@ -73,8 +72,8 @@ export default function Home() {
         params.delete('query');
       }
       replace(`${pathname}?${params.toString()}`);
-    
-}, [place,latitude,longitude]); 
+
+}, [latitude,longitude]);
 
 function convertUnixTimeToDate(unixUtc: number): Date {
   return new Date(unixUtc * 1000);
@@ -140,9 +139,7 @@ return (
         <div className="w-full bg-white border flex flex-row rounded-xl px-20 space-x-12 shadow-sm justify-between items-center mt-4">
               <div className='items-center justify-between'>
               {weatherData?.weather.map(condition =>
-                <div key={condition.id}>
-                  <Image src={getIconUrl(condition.icon)} alt={condition.main} width={5} height={5}/> {condition.main}
-                </div>)
+                <WeatherIcon iconName={condition.icon} />)
               }
               </div>
               <div className="flex flex-col items-center justify-between">
