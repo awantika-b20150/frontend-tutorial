@@ -198,7 +198,10 @@ return (
               <div className="flex flex-col items-center justify-between">
                 <strong>{Math.floor(weatherData?.main.temp ?? 0)}°</strong>
                 <div>Feels like {Math.floor(weatherData?.main.feels_like ?? 0)}°</div>
-                <div>({Math.floor(weatherData?.main.temp_min ?? 0)}°↓{" "} {" "} {Math.floor(weatherData?.main.temp_max ?? 0)}°↑)</div>
+                <div className='flex flex-col'>
+                <p>{Math.floor(weatherData?.main.temp_min ?? 0)}°↓</p>
+                <p>{Math.floor(weatherData?.main.temp_max ?? 0)}°↑</p>
+                </div>
               </div>
               <div className="flex flex-col gap-2 items-center justify-between text-s font-semibold text-black/80">
                 <p className="whitespace-nowrap">Humidity</p>
