@@ -1,128 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react'
-import axios from "axios";
-import Prefectures from "@/utils/Pref";
-import { Select } from 'antd';
 import { MdOutlineLocationOn, MdWbSunny } from "react-icons/md";
 import { MdMyLocation } from "react-icons/md";
 import { WiHumidity,WiStrongWind } from "react-icons/wi";
 import  ForecastWeatherDetail  from "@/components/ForecastWeatherDetails";
 import { format, parseISO } from "date-fns";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,Legend } from 'recharts';
-import { useSearchParams, usePathname, useRouter } from 'next/navigation';
-import { WeatherDetail } from '@/types/CurrentWeatherType';
-import { WeatherData } from '@/types/ForecastWeatherType';
-import { Chart } from '@/types/ChartType';
 import WeatherIcon from '@/components/WeatherIcon';
+import { useWeatherData } from '@/hooks/useWeatherData';
+import { convertUnixTimeToDate } from "@/utils/convertUnixTime";
+import ForecastChart from "@/components/Chart";
+import DropDown from "@/components/Dropdown";
 
 
 export default function Home() {
-  const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  const [weatherData,setWeatherData] = useState<WeatherDetail>();
-  const [latitude,setLatitude] = useState(0);
-  const [longitude,setLongitude] = useState(0);
-  const [place,setPlace] = useState("Japan");
-  const [forecast,setForecast] = useState<WeatherData>();
-
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
-  const day = currentDate.getDate();
-  const todayDate= `${year}/${month}/${day}`;
-  
-  //page routing
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams); //updating url
-  const pathname = usePathname();
-  const { replace } = useRouter();
-  const handleOnChange = async (value:string) => {
-    setPlace(value);
-  };
-  const DIRECT_URL=`${BASE_URL}/geo/1.0/direct?`;
-  const WEATHER_URL=`${BASE_URL}/data/2.5/weather?`;
-  const FORECAST_URL=`${BASE_URL}/data/2.5/forecast?`;
-  useEffect(() => {
-    axios
-        .get(DIRECT_URL,{
-          params: {
-            q: place,
-            limit:5,
-            appid:API_KEY
-          }
-        }) //getting coordinates based on place selected by user
-        .then((response) => {
-            const data = response.data;
-            setLatitude(data[0].lat);
-            setLongitude(data[0].lon);
-        });
-        if (place) {
-          params.set('query', place);
-        } else {
-          params.delete('query');
-        }
-        replace(`${pathname}?${params.toString()}`);
-    
-}, [place]); 
-
-useEffect(() => {
-  axios
-        .get(WEATHER_URL,{
-          params: {
-            lat: latitude,
-            lon:longitude,
-            appid:API_KEY,
-            units:'metric'
-          }
-        }) //getting current data
-        .then((response) => {
-            const data = response.data;
-            setWeatherData(data);
-        });
-    axios
-      .get(FORECAST_URL,{
-        params: {
-          lat: latitude,
-          lon:longitude,
-          appid:API_KEY,
-          units:'metric'
-        }
-      }) //getting next 5days data
-      .then((response) => {
-          const data = response.data;
-          setForecast(data);
-      });
-
-}, [latitude,longitude]);
-
-function convertUnixTimeToDate(unixUtc: number): Date {
-  return new Date(unixUtc * 1000);
-}
-
-const uniqueDates = [
-  ...new Set(
-    forecast?.list.map(
-      (entry) => new Date(entry.dt * 1000).toISOString().split("T")[0]
-    )
-  )
-];
-// Filtering data to get the first entry after 6 AM for each unique date
-const firstDataForEachDate = uniqueDates.map((date) => {
-  return forecast?.list.find((entry) => {
-    const entryDate = new Date((entry.dt) * 1000).toISOString().split("T")[0];
-    const entryTime = new Date((entry.dt) * 1000).getHours();
-    return entryDate === date && entryTime >= 6;
-  });
-});
-
-//getting temperature array of next 5 days 
-const chart_temp = new Array<Chart>;
-firstDataForEachDate.map((d) => 
-  chart_temp.push({
-    temp:(Math.floor(d?.main.temp ?? 0)),
-    dates: (d ? format(parseISO(d.dt_txt), "dd.MM") : "")
-  }
-));
+  const {place,weatherData,handleOnChange,searchParams,todayDate,chart_temp,firstDataForEachDate} = useWeatherData();
 
 return (
   <div className="w-screen flex flex-col gap-4 justify-between bg-gray-100 overflow-scroll">
@@ -140,13 +30,7 @@ return (
             <p className="text-slate-900/80 text-sm"> {place} </p>
             <div className="relative md:flex">
               {/* SearchBox */}
-              <Select
-              showSearch
-              placeholder="Select prefecture"
-              optionFilterProp="label"
-              onChange={handleOnChange}
-              options={Prefectures}
-              value={searchParams.get('query')?.toString()}
+              <DropDown onChange={handleOnChange} value={searchParams.get('query')?.toString()}
               />
             </div>
           </section>
@@ -183,14 +67,7 @@ return (
         </div>
         <p className="text-2xl text-center font-semibold mt-16">Temperature Chart (5 days)</p>
         <div className="w-full bg-white border flex flex-row rounded-xl px-20 space-x-8 shadow-sm items-center justify-between mt-4">
-        <LineChart width={600} height={300} data={chart_temp} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-            <Line type="monotone" dataKey="temp" stroke="#8884d8" />
-            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            <XAxis dataKey="dates" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-          </LineChart>
+        <ForecastChart data={chart_temp}/>
         </div>
       </div>
       {/* 5 day forecast data  */}
