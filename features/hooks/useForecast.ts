@@ -1,4 +1,4 @@
-import { useWeatherData } from "@/hooks/useWeatherData";
+import { useWeatherData } from "@/features/hooks/useWeatherData";
 
 
 const {forecast} = useWeatherData();

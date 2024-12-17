@@ -1,6 +1,6 @@
 import { Chart } from '@/types/ChartType';
 import { format, parseISO } from "date-fns";
-import { useForecast } from '@/hooks/useForecast';
+import { useForecast } from '@/features/hooks/useForecast';
 
 export function extractChart(){
     const {firstDataForEachDate} = useForecast();

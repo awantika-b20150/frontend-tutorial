@@ -5,12 +5,12 @@ import { WiHumidity,WiStrongWind } from "react-icons/wi";
 import  ForecastWeatherDetail  from "@/components/ForecastWeatherDetails";
 import { format, parseISO } from "date-fns";
 import WeatherIcon from '@/components/WeatherIcon';
-import { useWeatherData } from '@/hooks/useWeatherData';
+import { useWeatherData } from '@/features/hooks/useWeatherData';
 import { convertUnixTimeToDate } from "@/utils/convertUnixTime";
 import ForecastChart from "@/components/Chart";
 import DropDown from "@/components/Dropdown";
 import { extractChart } from "@/utils/extractChart";
-import { useForecast } from "@/hooks/useForecast";
+import { useForecast } from "@/features/hooks/useForecast";
 
 
 export default function Home() {
