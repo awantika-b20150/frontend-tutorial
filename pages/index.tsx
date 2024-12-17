@@ -11,60 +11,10 @@ import { format, parseISO } from "date-fns";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip,Legend } from 'recharts';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { WeatherDetail } from '@/types/CurrentWeatherType';
+import { WeatherData } from '@/types/ForecastWeatherType';
+import { Chart } from '@/types/ChartType';
 
-// Format in which current weather api returns data for given location
-interface WeatherDetail {
-  dt: number;
-  dt_txt:string;
-  main: {
-    temp: number;
-    feels_like: number;
-    temp_min: number;
-    temp_max: number;
-    humidity: number;
-  };
-  weather: {
-    id: number;
-    main: string;
-    description: string;
-    icon: string;
-  }[];
-  clouds: {
-    all: number;
-  };
-  wind: {
-    speed: number;
-    deg: number;
-    gust: number;
-  };
-}
-
-// format in which forecast for 5 days api returns the data for a given location
-interface WeatherData {
-  cod: string;
-  message: number;
-  cnt: number;
-  list: WeatherDetail[];
-  city: {
-    id: number;
-    name: string;
-    coord: {
-      lat: number;
-      lon: number;
-    };
-    country: string;
-    population: number;
-    timezone: number;
-    sunrise: number;
-    sunset: number;
-  };
-}
-
-// props of Linechart
-interface Chart {
-  dates:string,
-  temp:number
-}
 
 //getting icon based on current weather
 export function getIconUrl(code: string): string {
