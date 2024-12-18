@@ -17,9 +17,9 @@ export default function Home() {
   const {place,weatherData,handleOnChange,searchParams,todayDate,forecast} = useWeatherData();
 
 return (
-  <div className="w-screen flex flex-col gap-4 justify-between bg-gray-100 overflow-scroll">
+  <div className="w-screen flex flex-col justify-between bg-gray-100 overflow-scroll">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> 
-    <nav className="w-screen flex shadow-sm justify-between sticky top-0 left-0 z-50 bg-white">
+    <nav className="w-screen flex shadow-sm justify-between sticky z-70 h-24 bg-white">
         <div className="w-screen flex justify-between items-center max-w-7xl px-3 mx-auto">
           <div className="text-4xl font-extrabold dark:text-white">Weather</div>
           <MdWbSunny className="text-3xl mt-1 text-yellow-300" />
@@ -29,7 +29,6 @@ return (
               className="text-2xl  text-gray-400 hover:opacity-80 cursor-pointer"
             />
             <MdOutlineLocationOn className="text-3xl" />
-            <p className="text-slate-900/80 text-sm"> {place} </p>
             <div className="relative md:flex">
               {/* SearchBox */}
               <DropDown onChange={handleOnChange} value={searchParams.get('query')?.toString()}
