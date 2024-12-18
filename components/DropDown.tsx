@@ -15,6 +15,7 @@ export default function DropDown({onChange,value}:DropDownProps){
         onChange={onChange}
         options={Prefectures}
         value={value}
+        style={{width: "150px"}}
     />
   );
 
