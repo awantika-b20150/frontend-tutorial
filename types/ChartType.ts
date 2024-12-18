@@ -1,4 +1,6 @@
 export interface Chart {
     dates:string,
-    temp:number
+    temp:number,
+    humidity: number,
+    speed: number
   }

@@ -9,7 +9,9 @@ export function extractChart(data:WeatherData | undefined){
     firstDataForEachDate.map((d) => 
     chart_temp.push({
         temp:(Math.floor(d?.main.temp ?? 0)),
-        dates: (d ? format(parseISO(d.dt_txt), "dd.MM") : "")
+        dates: (d ? format(parseISO(d.dt_txt), "dd.MM") : ""),
+        humidity: (d?.main.humidity ?? 0),
+        speed: (d?.wind.speed ?? 1.64)
     }
     ));
     return chart_temp;
