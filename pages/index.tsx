@@ -45,7 +45,7 @@ return (
         <div className="w-full bg-white border flex flex-row rounded-xl px-20 space-x-12 shadow-sm justify-between items-center mt-4">
               <div className='items-center justify-between'>
               {weatherData?.weather.map(condition =>
-                <WeatherIcon iconName={condition.icon} />)
+                <WeatherIcon key={condition.id} iconName={condition.icon} />)
               }
               </div>
               <div className="flex flex-col items-center justify-between">
