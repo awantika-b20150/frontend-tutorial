@@ -8,7 +8,7 @@ import WeatherIcon from '@/components/WeatherIcon';
 import { useWeatherData } from '@/features/hooks/useWeatherData';
 import { convertUnixTimeToDate } from "@/utils/convertUnixTime";
 import ForecastChart from "@/components/Chart";
-import DropDown from "@/components/Dropdown";
+import DropDown from "@/components/DropDown";
 import { extractChart } from "@/utils/extractChart";
 import { extractForecast } from "@/utils/extractForecast";
 
